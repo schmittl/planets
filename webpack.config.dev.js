@@ -6,11 +6,15 @@ module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
     'webpack/hot/dev-server',
-    './src/js/index'
+    './src/index'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js'
+  },
+  resolve: {
+    root: path.resolve('./src/components'),
+    extensions: ['', '.js']
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -18,15 +22,19 @@ module.exports = {
     }),
     new webpack.HotModuleReplacementPlugin()
   ],
-  devtool: 'cheap-eval-source-map',
+  devtool: 'source-map',
   devServer: {
-    contentBase: './dist',
     hot: true
   },
   module: {
     loaders: [{
       test: /\.js$/,
       loaders: ['babel'],
+      include: path.join(__dirname, 'src')
+    },
+    {
+      test: /\.(png|jpe?g)$/,
+      loader: 'url-loader?limit=8192', // inline base64 URLs for <=8k images, direct URLs for the rest
       include: path.join(__dirname, 'src')
     }]
   }

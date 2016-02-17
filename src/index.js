@@ -1,8 +1,10 @@
-import THREE from 'three'
+import THREE from 'three';
+import Earth from 'earth/earth';
 
 var renderer;
 var scene;
 var camera;
+var earth;
 
 function createRenderer() {
   renderer = new THREE.WebGLRenderer();
@@ -15,38 +17,36 @@ function createCamera() {
     45, // Field of View
     window.innerWidth / window.innerHeight, // aspect ratio
     0.1, 1000); // far and near plane
-  camera.position.x = 15;
-  camera.position.y = 16;
-  camera.position.z = 13;
+  camera.position.x = 90;
+  camera.position.y = 32;
+  camera.position.z = 32;
   camera.lookAt(scene.position);
 }
 
-function createSphere() {
-  var sphereGeometry = new THREE.SphereGeometry(6,30,30); //height width depth
-  var sphereMaterial = new THREE.MeshLambertMaterial({
-    color: "red"
-  });
-  var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-  scene.add(sphere);
-}
-
 function createLight() {
-  var spotLight = new THREE.SpotLight(0xffffff);
-  spotLight.position.set(10, 20, 20);
-  scene.add(spotLight);
+  var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.set(100, 10, -50);
+  directionalLight.name = 'directional';
+  scene.add(directionalLight);
+
+  var ambientLight = new THREE.AmbientLight(0x111111);
+  scene.add(ambientLight);
 }
 
+function createEarth() {
+  earth = new Earth();
+  scene.add(earth.mesh);
+}
 
 //init() gets executed once
 function init() {
-
   scene = new THREE.Scene();
 
   createRenderer();
   createCamera();
 
   createLight();
-  createSphere();
+  createEarth();
 
   document.body.appendChild(renderer.domElement);
 
@@ -57,6 +57,8 @@ function init() {
 
 //infinite loop
 function render() {
+  earth.update();
+
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }

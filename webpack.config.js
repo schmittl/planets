@@ -4,12 +4,16 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: [
-    './src/js/index'
+    './src/index'
   ],
   output: {
     path: path.join(__dirname, 'gh-pages'),
     filename: 'bundle.js',
     publicPath: '/planets/'
+  },
+  resolve: {
+    root: path.resolve('./src/components'),
+    extensions: ['', '.js']
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
@@ -26,6 +30,11 @@ module.exports = {
     loaders: [{
       test: /\.js$/,
       loaders: ['babel'],
+      include: path.join(__dirname, 'src')
+    },
+    {
+      test: /\.(png|jpe?g)$/,
+      loader: 'url-loader?limit=8192', // inline base64 URLs for <=8k images, direct URLs for the rest
       include: path.join(__dirname, 'src')
     }]
   }
