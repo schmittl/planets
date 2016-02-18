@@ -1,3 +1,4 @@
+import './index.css';
 import THREE from 'three';
 import Earth from 'earth/earth';
 
@@ -38,7 +39,14 @@ function createEarth() {
   scene.add(earth.mesh);
 }
 
-//init() gets executed once
+function onWindowResize() {
+  var height = window.innerHeight;
+  var width  = window.innerWidth;
+  renderer.setSize( width, height );
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+}
+
 function init() {
   scene = new THREE.Scene();
 
@@ -49,6 +57,7 @@ function init() {
   createEarth();
 
   document.body.appendChild(renderer.domElement);
+  window.addEventListener( 'resize', onWindowResize, false );
 
   //render() gets called at end of init
   //as it looped forever
