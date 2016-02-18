@@ -1,16 +1,22 @@
 import './index.css';
 import THREE from 'three';
 import Earth from 'earth/earth';
+import FlyControls from 'FlyControls';
 
+var clock;
 var renderer;
 var scene;
 var camera;
 var earth;
+var controls;
+var frameid;
+var canvas;
 
 function createRenderer() {
   renderer = new THREE.WebGLRenderer();
   renderer.setClearColor(0x000000, 1.0);
   renderer.setSize(window.innerWidth, window.innerHeight);
+  canvas = renderer.domElement;
 }
 
 function createCamera() {
@@ -22,6 +28,14 @@ function createCamera() {
   camera.position.y = 32;
   camera.position.z = 32;
   camera.lookAt(scene.position);
+}
+
+function createControls() {
+  controls = new FlyControls(camera);
+  controls.movementSpeed = 20;
+  controls.rollSpeed = 0.25;
+  controls.autoForward = false;
+  controls.dragToLook = false;
 }
 
 function createLight() {
@@ -47,29 +61,53 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 }
 
+function onMouseLeave() {
+  if (frameid) {
+    clock.stop();
+    window.cancelAnimationFrame(frameid);
+    frameid = undefined;
+  }
+}
+
+function onMouseEnter() {
+  if (!frameid) {
+    clock.start();
+    loop();
+  }
+}
+
+function registerEventListener() {
+  window.addEventListener('resize', onWindowResize, false);
+  canvas.addEventListener('mouseleave', onMouseLeave, false);
+  canvas.addEventListener('mouseenter', onMouseEnter, false);
+}
+
 function init() {
   scene = new THREE.Scene();
+  clock = new THREE.Clock();
 
   createRenderer();
   createCamera();
+  createControls();
 
   createLight();
   createEarth();
 
-  document.body.appendChild(renderer.domElement);
-  window.addEventListener( 'resize', onWindowResize, false );
+  registerEventListener();
+  document.body.appendChild(canvas);
 
-  //render() gets called at end of init
-  //as it looped forever
-  render();
+  loop();
 }
 
-//infinite loop
-function render() {
+
+function loop() {
+  var delta = clock.getDelta();
+  frameid = requestAnimationFrame(loop);
+
   earth.update();
+  controls.update(delta);
 
   renderer.render(scene, camera);
-  requestAnimationFrame(render);
 }
 
 init();
