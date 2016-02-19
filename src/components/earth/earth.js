@@ -58,9 +58,9 @@ class Earth {
     return this.earthMesh;
   }
 
-  update() {
-    this.earthMesh.rotation.y += 0.0005;
-    this.cloudsMesh.rotation.y += 0.0007;
+  update(delta) {
+    this.earthMesh.rotation.y += delta * 0.030;
+    this.cloudsMesh.rotation.y += delta * 0.042;
   }
 }
 

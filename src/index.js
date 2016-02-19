@@ -104,7 +104,7 @@ function loop() {
   var delta = clock.getDelta();
   frameid = requestAnimationFrame(loop);
 
-  earth.update();
+  earth.update(delta);
   controls.update(delta);
 
   renderer.render(scene, camera);
