@@ -2,7 +2,7 @@ import './index.css';
 import THREE from 'three';
 import Earth from 'earth/earth';
 import Moon from 'moon/moon';
-import FlyControls from 'FlyControls';
+import FlyControls from 'controls';
 
 var clock;
 var renderer;
@@ -108,7 +108,7 @@ function loop() {
 
   earth.update(delta);
   moon.update(delta);
-  controls.update( hasFocus ? delta : 0 ); // do not update controls when mouse is not on canvas
+  controls.update( hasFocus ? delta : 0 ); // freeze camera when mouse is not on canvas
 
 
   renderer.render(scene, camera);

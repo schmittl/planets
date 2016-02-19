@@ -1,18 +1,7 @@
 import THREE from 'three';
+import utils from '../utils';
 import moonMap from './moonmap1k.jpg';
 import moonBumpMap from './moonbump1k.jpg';
-
-
-function loadTexture(path) {
-  var texture = new THREE.Texture();
-  var loader = new THREE.ImageLoader();
-  loader.load(path, function (image) {
-    texture.image = image;
-    texture.needsUpdate = true;
-  });
-
-  return texture;
-}
 
 class Moon {
   constructor() {
@@ -20,8 +9,8 @@ class Moon {
     var sphereGeometry = new THREE.SphereGeometry(5, 30, 30);
 
     //load textures
-    var moonTexture = loadTexture(moonMap);
-    var bumpTexture = loadTexture(moonBumpMap);
+    var moonTexture = utils.loadTexture(moonMap);
+    var bumpTexture = utils.loadTexture(moonBumpMap);
 
     //create material
     var moonMaterial = new THREE.MeshPhongMaterial();

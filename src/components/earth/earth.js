@@ -1,19 +1,9 @@
 import THREE from 'three';
+import utils from '../utils';
 import earthMap from './earthmap2k.jpg';
 import earthNormalMap from './earth_normalmap_flat2k.jpg';
 import earthSpecularMap from './earthspec2k.jpg';
 import clouds from './fair_clouds_1k.png';
-
-function loadTexture(path) {
-  var texture = new THREE.Texture();
-  var loader = new THREE.ImageLoader();
-  loader.load(path, function (image) {
-    texture.image = image;
-    texture.needsUpdate = true;
-  });
-
-  return texture;
-}
 
 class Earth {
   constructor() {
@@ -21,9 +11,9 @@ class Earth {
     var sphereGeometry = new THREE.SphereGeometry(15, 30, 30);
 
     //load textures
-    var earthTexture = loadTexture(earthMap);
-    var normalTexture = loadTexture(earthNormalMap);
-    var specularTexture = loadTexture(earthSpecularMap);
+    var earthTexture = utils.loadTexture(earthMap);
+    var normalTexture = utils.loadTexture(earthNormalMap);
+    var specularTexture = utils.loadTexture(earthSpecularMap);
 
     //create material
     var earthMaterial = new THREE.MeshPhongMaterial();
@@ -43,7 +33,7 @@ class Earth {
     var sphereGeometry = new THREE.SphereGeometry(15.2, 30, 30);
 
     //load texture
-    var cloudsTexture = loadTexture(clouds);
+    var cloudsTexture = utils.loadTexture(clouds);
 
     var cloudsMaterial = new THREE.MeshPhongMaterial();
     cloudsMaterial.map = cloudsTexture;
