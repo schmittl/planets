@@ -51,7 +51,7 @@ class Earth {
 
     this.cloudsMesh = new THREE.Mesh(sphereGeometry, cloudsMaterial);
     this.cloudsMesh.name = 'clouds';
-    this.earthMesh.children.push(this.cloudsMesh);
+    this.earthMesh.add(this.cloudsMesh);
   }
 
   get mesh() {

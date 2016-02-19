@@ -1,6 +1,7 @@
 import './index.css';
 import THREE from 'three';
 import Earth from 'earth/earth';
+import Moon from 'moon/moon';
 import FlyControls from 'FlyControls';
 
 var clock;
@@ -8,9 +9,11 @@ var renderer;
 var scene;
 var camera;
 var earth;
+var moon;
 var controls;
 var frameid;
 var canvas;
+var hasFocus;
 
 function createRenderer() {
   renderer = new THREE.WebGLRenderer();
@@ -53,6 +56,11 @@ function createEarth() {
   scene.add(earth.mesh);
 }
 
+function createMoon() {
+  moon = new Moon();
+  earth.mesh.add(moon.mesh);
+}
+
 function onWindowResize() {
   var height = window.innerHeight;
   var width  = window.innerWidth;
@@ -62,18 +70,11 @@ function onWindowResize() {
 }
 
 function onMouseLeave() {
-  if (frameid) {
-    clock.stop();
-    window.cancelAnimationFrame(frameid);
-    frameid = undefined;
-  }
+  hasFocus = false;
 }
 
 function onMouseEnter() {
-  if (!frameid) {
-    clock.start();
-    loop();
-  }
+  hasFocus = true;
 }
 
 function registerEventListener() {
@@ -92,6 +93,7 @@ function init() {
 
   createLight();
   createEarth();
+  createMoon();
 
   registerEventListener();
   document.body.appendChild(canvas);
@@ -105,7 +107,9 @@ function loop() {
   frameid = requestAnimationFrame(loop);
 
   earth.update(delta);
-  controls.update(delta);
+  moon.update(delta);
+  controls.update( hasFocus ? delta : 0 ); // do not update controls when mouse is not on canvas
+
 
   renderer.render(scene, camera);
 }
