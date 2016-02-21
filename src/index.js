@@ -10,7 +10,7 @@ var clock, renderer, scene, camera, controls, canvas;
 var stars, earth, moon, sun;
 
 function createRenderer() {
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({antialias: true});
   renderer.setClearColor(0x000000, 1.0);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
@@ -30,6 +30,10 @@ function createCamera() {
 
 function createControls() {
   controls = new OrbitControls(camera, canvas);
+  controls.noKeys = true;
+  controls.noPan = true;
+  controls.minDistance = 40;
+  controls.maxDistance = 500;
 }
 
 function createLight() {
@@ -48,12 +52,13 @@ function createStars() {
 
 function createEarth() {
   earth = new Earth();
-  scene.add(earth.createPath());
+  scene.add(earth.createOrbit());
 }
 
 function createMoon() {
   moon = new Moon();
   earth.mesh.add(moon.mesh);
+  earth.mesh.add(moon.createOrbit());
 }
 
 function createSun() {
