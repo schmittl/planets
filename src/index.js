@@ -4,20 +4,10 @@ import Earth from 'earth/earth';
 import Moon from 'moon/moon';
 import Sun from 'sun/sun';
 import Stars from 'stars/stars';
-import FlyControls from 'controls';
+import OrbitControls from 'OrbitControls';
 
-var clock;
-var renderer;
-var scene;
-var camera;
-var stars;
-var earth;
-var moon;
-var sun;
-var controls;
-var frameid;
-var canvas;
-var hasFocus;
+var clock, renderer, scene, camera, controls, canvas;
+var stars, earth, moon, sun;
 
 function createRenderer() {
   renderer = new THREE.WebGLRenderer();
@@ -39,11 +29,7 @@ function createCamera() {
 }
 
 function createControls() {
-  controls = new FlyControls(camera);
-  controls.movementSpeed = 20;
-  controls.rollSpeed = 0.25;
-  controls.autoForward = false;
-  controls.dragToLook = false;
+  controls = new OrbitControls(camera, canvas);
 }
 
 function createLight() {
@@ -62,6 +48,7 @@ function createStars() {
 
 function createEarth() {
   earth = new Earth();
+  scene.add(earth.createPath());
 }
 
 function createMoon() {
@@ -83,18 +70,8 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 }
 
-function onMouseLeave() {
-  hasFocus = false;
-}
-
-function onMouseEnter() {
-  hasFocus = true;
-}
-
 function registerEventListener() {
   window.addEventListener('resize', onWindowResize, false);
-  canvas.addEventListener('mouseleave', onMouseLeave, false);
-  canvas.addEventListener('mouseenter', onMouseEnter, false);
 }
 
 function init() {
@@ -120,13 +97,13 @@ function init() {
 
 function loop() {
   var delta = clock.getDelta();
-  frameid = requestAnimationFrame(loop);
 
   earth.update(delta);
   moon.update(delta);
-  controls.update( hasFocus ? delta : 0 ); // freeze camera when mouse is not on canvas
+  controls.update();
 
   renderer.render(scene, camera);
+  requestAnimationFrame(loop);
 }
 
 init();

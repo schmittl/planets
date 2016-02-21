@@ -47,10 +47,20 @@ class Earth {
 
     this.counter = 0;
     this.speed = 0.3;
+    this.radius = 100;
   }
 
   get mesh() {
     return this.earthMesh;
+  }
+
+  createPath() {
+    var material = new THREE.LineBasicMaterial({ color: 0xeeeeeee });
+    var geometry = new THREE.CircleGeometry(this.radius, 100);
+    geometry.vertices.shift();
+    var line = new THREE.Line(geometry, material);
+    line.rotation.x = Math.PI / 2;
+    return line;
   }
 
   update(delta) {
@@ -59,8 +69,8 @@ class Earth {
 
     this.counter += delta * this.speed;
 
-    this.earthMesh.position.x = 100 * Math.sin(this.counter);
-    this.earthMesh.position.z = 100 * Math.cos(this.counter);
+    this.earthMesh.position.x = this.radius * Math.sin(this.counter);
+    this.earthMesh.position.z = this.radius * Math.cos(this.counter);
   }
 }
 
