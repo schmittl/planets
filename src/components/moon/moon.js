@@ -6,7 +6,7 @@ import moonBumpMap from './moonbump1k.jpg';
 class Moon {
   constructor() {
     //create geometry
-    var sphereGeometry = new THREE.SphereGeometry(5, 30, 30);
+    var sphereGeometry = new THREE.SphereGeometry(2, 30, 30);
 
     //load textures
     var moonTexture = utils.loadTexture(moonMap);
@@ -20,6 +20,8 @@ class Moon {
     this.moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
     this.moonMesh.name = 'moon';
     this.moonMesh.position.setX(30);
+    this.moonMesh.receiveShadow = true;
+    this.moonMesh.castShadow = true;
 
     this.counter = 0;
     this.speed = 0.5;
@@ -31,7 +33,7 @@ class Moon {
 
   update(delta) {
     this.counter += delta * this.speed;
-    this.moonMesh.rotation.y += delta * 0.030;
+    this.moonMesh.rotation.y +=  delta * 0.5;
 
     this.moonMesh.position.x = 40 * Math.sin(this.counter);
     this.moonMesh.position.z = 40 * Math.cos(this.counter);
