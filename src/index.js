@@ -3,12 +3,14 @@ import THREE from 'three';
 import Earth from 'earth/earth';
 import Moon from 'moon/moon';
 import Sun from 'sun/sun';
+import Stars from 'stars/stars';
 import FlyControls from 'controls';
 
 var clock;
 var renderer;
 var scene;
 var camera;
+var stars;
 var earth;
 var moon;
 var sun;
@@ -21,7 +23,7 @@ function createRenderer() {
   renderer = new THREE.WebGLRenderer();
   renderer.setClearColor(0x000000, 1.0);
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMapEnabled = true;
+  renderer.shadowMap.enabled = true;
   canvas = renderer.domElement;
 }
 
@@ -51,6 +53,11 @@ function createLight() {
 
   var ambientLight = new THREE.AmbientLight(0x222222);
   scene.add(ambientLight);
+}
+
+function createStars() {
+  stars = new Stars();
+  scene.add(stars.mesh);
 }
 
 function createEarth() {
@@ -98,6 +105,7 @@ function init() {
   createCamera();
   createControls();
 
+  createStars();
   createLight();
   createEarth();
   createMoon();
@@ -117,7 +125,6 @@ function loop() {
   earth.update(delta);
   moon.update(delta);
   controls.update( hasFocus ? delta : 0 ); // freeze camera when mouse is not on canvas
-
 
   renderer.render(scene, camera);
 }
