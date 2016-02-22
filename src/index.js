@@ -65,6 +65,7 @@ function createSun() {
   sun = new Sun();
   sun.mesh.add(earth.mesh);
   scene.add(sun.mesh);
+  scene.add(sun.rays);
 }
 
 function onWindowResize() {
@@ -105,6 +106,7 @@ function loop() {
 
   earth.update(delta);
   moon.update(delta);
+  sun.update(delta);
   controls.update();
 
   renderer.render(scene, camera);

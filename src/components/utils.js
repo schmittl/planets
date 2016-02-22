@@ -10,7 +10,14 @@ var utils = {
     });
 
     return texture;
+  },
+
+  randomColorBetween: function(a, b) {
+    var from = new THREE.Color(a);
+    var to = new THREE.Color(b);
+    return from.lerp(to, Math.random());
   }
+
 };
 
 export default utils;
