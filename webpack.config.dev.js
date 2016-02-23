@@ -19,12 +19,13 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html'
-    }),
-    new webpack.HotModuleReplacementPlugin()
+    })
   ],
   devtool: 'source-map',
   devServer: {
-    hot: true
+    colors:             true,
+    historyApiFallback: true,
+    progress:           true
   },
   module: {
     loaders: [{
