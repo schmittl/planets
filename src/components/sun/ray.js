@@ -4,46 +4,46 @@ import utils from '../utils';
 class Ray {
   constructor() {
     this.geometry = new THREE.Geometry();
-    this.createRay();
+    this.material = new THREE.LineBasicMaterial();
 
-    this.line = new THREE.Line(this.geometry, new THREE.LineBasicMaterial({
-      color: utils.randomColorBetween('orange', 'orangered'),
-      opacity: utils.randomNumberBetween(0.1, 1)
-    }));
+    this.initializeRay();
+
+    this.line = new THREE.Line(this.geometry, this.material);
   }
 
-  createRay() {
+  initializeRay() {
     this.counter = 0;
 
-    var vertex = this.randomVector();
+    var vertex = Ray.randomVector();
+    vertex.normalize();
     vertex.multiplyScalar(30);
+
     this.geometry.vertices[0] = vertex;
+    this.geometry.vertices[1] = vertex.clone();
 
-    var vertex2 = vertex.clone();
-    vertex2.multiplyScalar(utils.randomNumberBetween(1, 1.375));
-    this.geometry.vertices[1] = vertex;
+    this.length = utils.randomNumberBetween(4, 11.25);
+    this.speed  = utils.randomNumberBetween(1, 3.5);
 
-    this.direction = vertex2.clone().sub(vertex);
-    this.speed = utils.randomNumberBetween(2, 3);
+    this.material.color = utils.randomColorBetween('orange', 'orangered');
+    this.material.opacity = utils.randomNumberBetween(0.1, 1);
+    this.material.needsUpdate = true;
   }
 
   update(delta) {
     this.counter += delta * this.speed;
 
     if(this.counter >= Math.PI * 2) {
-      this.createRay();
+      this.initializeRay();
     } else {
       var scale = (Math.sin(this.counter - Math.PI / 2) + 1) / 2;
-      this.geometry.vertices[1] = this.geometry.vertices[0].clone().addScaledVector(this.direction, scale);
+      this.geometry.vertices[1].setLength(30 + this.length * scale);
     }
 
     this.geometry.verticesNeedUpdate = true;
   }
 
-  randomVector() {
-    var vertex = new THREE.Vector3(utils.randomNumberBetween(-1, 1), utils.randomNumberBetween(-1, 1), utils.randomNumberBetween(-1, 1));
-    vertex.normalize();
-    return vertex;
+  static randomVector() {
+    return new THREE.Vector3(utils.randomNumberBetween(-1, 1), utils.randomNumberBetween(-1, 1), utils.randomNumberBetween(-1, 1));
   }
 }
 
