@@ -65,7 +65,7 @@ function createSun() {
   sun = new Sun();
   sun.mesh.add(earth.mesh);
   scene.add(sun.mesh);
-  scene.add(sun.rays);
+  scene.add(sun.group);
 }
 
 function onWindowResize() {
